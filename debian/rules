@@ -26,6 +26,8 @@ export PYBUILD_NAME=unipi-one
 ##   which is invoked using dpkg-buildpackage --build=any
 override_dh_virtualenv:
 	dh_virtualenv
+	sed 's#/opt/unipi-one/bin/python#debian/unipi-one/opt/unipi-one/bin/python#' -i debian/unipi-one/opt/unipi-one/bin/pip3
+	debian/unipi-one/opt/unipi-one/bin/pip3 uninstall -y setuptools wheel pip
 
 #	dh_virtualenv --break-system-packages
 
