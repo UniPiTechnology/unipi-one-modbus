@@ -6,11 +6,11 @@ StartLimitIntervalSec=300
 
 [Service]
 Type=simple
-ExecStart=/opt/evok/bin/python /opt/evok/lib/python3.11/site-packages/evok/evok.py
+ExecStart=/opt/unipi-one/bin/unipi-one -l
 TimeoutStopSec=3
-SyslogLevel=debug
+#SyslogLevel=debug
 SyslogIdentifier=unipi-one
-StandardOutput=null
+#StandardOutput=null
 WorkingDirectory=/opt/evok
 
 Restart=always
