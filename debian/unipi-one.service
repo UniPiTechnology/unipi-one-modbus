@@ -1,6 +1,6 @@
 [Unit]
 Description=Unipi 1.x ModBus Server
-before=evok.service
+Before=evok.service
 After=pigpiod.service
 StartLimitIntervalSec=300
 
@@ -8,11 +8,8 @@ StartLimitIntervalSec=300
 Type=simple
 ExecStart=/opt/unipi-one/bin/unipi-one -l
 TimeoutStopSec=3
-#SyslogLevel=debug
-SyslogIdentifier=unipi-one
-#StandardOutput=null
-WorkingDirectory=/opt/evok
-
+WorkingDirectory=/opt/unipi-one
+User=root
 Restart=always
 
 [Install]
