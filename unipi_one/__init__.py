@@ -1,5 +1,8 @@
 
+from .starter import main
+
 __all__ = [
+    "main",
     "__version__",
     "__version_full__",
 ]
