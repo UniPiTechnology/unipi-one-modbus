@@ -1,92 +1,184 @@
-# unipi-one
+![unipi logo](https://github.com/UniPiTechnology/evok/raw/master/www/evok/js/jquery/images/unipi-logo-short-cmyk.svg?sanitize=true "UniPi logo")
+
+# unipi-one - Modbus server for Unipi 1.x and Unipi Lite devices
+
+EVOK is the primary Web-services API for [NEURON], [AXON] and [UniPi 1.1] devices. It provides a RESTful interface over HTTP, a JSON-RPC interface, a WebSocket interface a SOAP interface and a bulk JSON interface to UniPi devices.
+
+Evok is still in active development, so any testing, feedback and contributions are very much welcome and appreciated.
+
+APIs included in EVOK:
+
+- RESTful WebForms API
+- RESTful JSON API
+- Bulk request JSON API
+- WebSocket API
+- SOAP API
+- JSON-RPC API
+
+EVOK also supports sending notifications via webhook.
+
+### For more information see our documentation at [api-docs.io].
+
+## Installation process on AXON/Neuron PLCs using pre-build OS images (recommended)
+
+The latest images for Axon/Neuron controllers can be downloaded from:
+
+[UniPi.technology Knowledge Base](https://kb.unipi.technology/en:files:software:os-images:)
+
+All necessary APT UniPi repositories are already preconfigured in the OS images. Therefore, all that's required is to login to the PLC via SSH (there is a large number of clients you can use, for windows we recommend using [PUTTY]). The default username for Axon PLCs is "unipi" and the default password is "unipi.technology". After you connect to your Axon PLC execute the following commands:
+
+    sudo su
+    apt-get update
+    apt-get upgrade
+    reboot
+    
+    sudo su
+    apt-get install evok
+    systemctl enable evok
+    reboot
+
+It is possible that some (or all) of the above steps will already have been finished previously; in that case simply continue on with the next steps. Performing all the steps will ensure you have the latest version of the software installed.
+
+You can use the following commands to update your EVOK package distribution to a new version:
+
+    sudo su
+    apt-get install evok
+    reboot
 
 
+## Installation process on Neuron family controllers with fresh Rapsbian image 
 
-## Getting started
+*Warning: if you have previously used the shell script install method noted below you will need to use a clean image!*
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+In order to install EVOK on Neuron you will need an SD card with a standard (Lite) ***Raspbian Stretch*** or ***Raspbian Buster*** image. It is also necessary to enable SSH on the image by creating an empty file named "ssh" in the boot partition of your SD card (the partition should be visible on all systems which support FAT16, which includes Windows, Linux and OSX among others).
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+To install EVOK itself first connect to your Neuron using SSH (there is a large number of clients you can use, for windows we recommend using [PUTTY]). The default username for Raspbian is "pi" and the default password is "raspberry". After you connect to your Neuron execute the following commands: 
 
-## Add your files
+*NOTE: The installation process will overwrite default server configuration for NGINX*
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+    sudo su
+    echo "deb https://repo.unipi.technology/debian $(lsb_release -sc) main" >> /etc/apt/sources.list.d/unipi.list
+    wget https://repo.unipi.technology/debian/unipi_pub.gpg -O - | apt-key add
+    apt-get update
+    apt-get upgrade
+    reboot
+    
+    sudo su
+    apt-get install nginx
+    rm -f /etc/nginx/sites-enabled/default
+    apt-get install evok
+    systemctl enable evok
+    reboot
+    
+It is possible that some (or all) of the above steps will already have been finished previously; in that case simply continue on with the next steps. Performing all the steps will ensure you have the latest version of the software installed.
 
-```
-cd existing_repo
-git remote add origin https://git.unipi.technology/UniPi/unipi-one.git
-git branch -M main
-git push -uf origin main
-```
+You can use the following commands to update your EVOK package distribution to a new version:
 
-## Integrate with your tools
+    sudo su
+    apt-get install unipi-modbus-tools
+    apt-get install evok
+    reboot
 
-- [ ] [Set up project integrations](https://git.unipi.technology/UniPi/unipi-one/-/settings/integrations)
+## Legacy installation process using a shell script (REQUIRED FOR UNIPI 1.1!)
 
-## Collaborate with your team
+In order to install EVOK on your device you will need an SD card with a standard ***Raspbian Buster*** or ***Raspbian Stretch*** image. It is also necessary to enable SSH on the image by creating an empty file named "ssh" in the boot partition of your SD card (the partition should be visible on all systems which support FAT16, which includes Windows, Linux and OSX among others).
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+To install EVOK itself first connect to your device using SSH (there is a large number of clients you can use, for windows we recommend using [PUTTY]). The default username for Raspbian is "pi" and the default password is "raspberry". After you connect to your device execute the following commands:
 
-## Test and Deploy
+    sudo su
+    wget https://github.com/UniPiTechnology/evok/archive/v.2.0.7h.zip
+    unzip v.2.0.7h.zip
+    cd evok-v.2.0.7h
+    bash install-evok.sh
 
-Use the built-in continuous integration in GitLab.
+The installation script should take care of everything else, but be aware there may be some issues with limited and/or broken functionality. Please report any bugs you find on the [github repository].
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+# Instructions for use
 
-***
+The EVOK API can be accessed in several different ways, including SOAP, REST, Bulk JSON, JSON, WebSocket et al.
 
-# Editing this README
+### For details on how to do so please see our documentation at [api-docs.io].
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## Debugging
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+When reporting a bug or posting questions to [our forum] please set proper logging levels in /etc/evok.conf, restart your device and check the log file (/var/log/evok.log). For more detailed log information you can also run evok by hand. To do that you need to first stop the service by executing the following commands (section split according to installation method):
 
-## Name
-Choose a self-explaining name for your project.
+_**NOTE: Running EVOK manually is more difficult if using the .deb package installation system; it may be simpler to use the log file instead, unless the information it provides is not sufficient**_
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### Debian package installation
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+First execute the command below:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+    sudo systemctl stop evok
+    
+and then run evok manually as root user by executing the following commands:
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+    sudo su
+    /bin/cp -f /etc/nginx/sites-available/evok /etc/nginx/sites-enabled/
+    /bin/mv -f /etc/nginx/sites-enabled/mervis /etc/nginx/sites-available/
+    /bin/rm -f /etc/nginx/sites-enabled/mervis
+    /bin/ln -sf /etc/nginx/sites-enabled/evok /etc/evok-nginx.conf
+    cd /opt/evok
+    systemctl restart nginx
+    /opt/evok/bin/python /opt/evok/lib/python2.7/site-packages/evok/evok.py
+    
+You can then look through/paste the output of the script.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Script installation
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+First execute the command below:
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+    sudo systemctl stop evok
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+and then run evok manually as root user by executing the following commnad:
+    
+    sudo python /opt/evok/evok.py
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+You can then look through/paste the output of the script.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## Uninstallation
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### Debian package installation
+To uninstall EVOK please remove the evok package using the following apt command
 
-## License
-For open source projects, say how it is licensed.
+    sudo su
+    apt-get remove evok
+    reboot
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+### Script installation
+To uninstall EVOK please run the uninstallation script which is located in the `/opt/evok/` folder.
+
+    sudo su
+    bash uninstall-evok.sh
+
+Note that after uninstalling Evok you have to reboot your device to ensure all the files and settings are gone. 
+
+The installation script also enables the I2C subsystem (if it is not otherwise enabled before), but the uninstallation script does not disable it again.
+
+## Developer Note
+
+Do you feel like contributing to EVOK, or perhaps have a neat idea for an improvement to our system? Great! We are open to all ideas. Get in touch with us via email to info at unipi DOT technology
+
+License
+============
+Apache License, Version 2.0
+
+----
+Raspberry Pi is a trademark of the Raspberry Pi Foundation
+
+[api-docs.io]:https://evok-14.api-docs.io/1.11/
+[PUTTY]:http://www.putty.org/
+[github repository]:https://github.com/UniPiTechnology/evok
+[OpenSource image]:https://files.unipi.technology/s/public?path=%2FSoftware%2FOpen-Source%20Images
+[IndieGogo]:https://www.indiegogo.com/projects/unipi-the-universal-raspberry-pi-add-on-board
+[NEURON]:https://www.unipi.technology/products/unipi-neuron-3?categoryId=2
+[UniPi 1.1]:https://www.unipi.technology/products/unipi-1-1-1-1-lite-19?categoryId=1
+[Axon]:https://www.unipi.technology/products/unipi-axon-135?categoryId=13
+[PIGPIO]:http://abyz.co.uk/rpi/pigpio/
+[tornado]:https://pypi.python.org/pypi/tornado/
+[toro]:https://pypi.python.org/pypi/toro/
+[tornardorpc]:https://github.com/joshmarshall/tornadorpc
+[websocket Python library]:https://pypi.python.org/pypi/websocket-client/
+[our forum]:http://forum.unipi.technology/
+[intructions below]:https://github.com/UniPiTechnology/evok#installing-evok-for-neuron
+[jsonrpclib]:https://github.com/joshmarshall/jsonrpclib

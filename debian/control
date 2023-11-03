@@ -1,0 +1,16 @@
+Source: unipi-one
+Section: python
+Priority: optional
+Maintainer: Miroslav Ondra <ondra@unipi.technology>
+Build-Depends: debhelper-compat (= 13), dh-python, debhelper (>= 13), python3-all, python3.11-dev, dh-virtualenv (>= 1.2), dh-exec
+Standards-Version: 3.9.5
+Homepage: http://www.unipi.technology
+Vcs-Git: https://github.com/UniPiTechnology/unipi-one.git
+Vcs-Browser: https://github.com/UniPiTechnology/unipi-one/
+
+Package: unipi-one
+Architecture: any
+Pre-Depends: dpkg (>= 1.21.1), python3, ucf, ${misc:Pre-Depends}, ${shlibs:Depends}
+Depends: pigpiod, ${misc:Depends}
+Recommends: unipi-os-configurator
+Description: Unipi Modbus server for Unipi 1.x/Lite device
