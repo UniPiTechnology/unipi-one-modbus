@@ -23,11 +23,8 @@ dependencies = [
     'pigpio >= 1.78',
 ]
 
-[tool.setuptools]
-packages = ["unipi-one"]
-
-[project.scripts]
-unipi-one = "unipi-one"
+#[project.scripts]
+#unipi-one = "unipi_one:main"
 
 [project.urls]
 "Homepage" = "https://github.com/pypa/sampleproject"
