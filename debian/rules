@@ -22,8 +22,11 @@ export PYBUILD_NAME=unipi-one
 %:
 	dh $@ --with python-virtualenv
 
+## use this override to suppress parameter -a
+##   which is invoked using dpkg-buildpackage --build=any
+override_dh_virtualenv:
+	dh_virtualenv
 
-#override_dh_virtualenv:
 #	dh_virtualenv --break-system-packages
 
 #override_dh_installinit:
