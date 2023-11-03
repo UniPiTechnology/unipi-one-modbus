@@ -4,7 +4,6 @@ import struct
 from pigpio import u2i, _u2i
 import pigpio
 import asyncio
-import six
 import socket
 import logging
 
@@ -63,8 +62,7 @@ class NotifyPipeProtocol(asyncio.BaseProtocol):
                 logging.debug(f"Notify data error: {E}")
 
 
-@six.add_metaclass(DevMeta)
-class GpioChip:
+class GpioChip(metaclass=DevMeta):
 
     def __init__(self, name, channel):
 

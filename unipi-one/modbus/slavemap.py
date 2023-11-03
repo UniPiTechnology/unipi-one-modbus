@@ -1,7 +1,6 @@
 import asyncio
 import logging
 
-import six
 
 from pymodbus.datastore import (
     ModbusSequentialDataBlock,
@@ -12,8 +11,7 @@ from ..rpcmethods import DevMeta, get_kwargs, check_dev_type
 from .server import ModbusServer
 
 
-@six.add_metaclass(DevMeta)
-class ModbusSlaveMap(ModbusSlaveContext):
+class ModbusSlaveMap(ModbusSlaveContext,metaclass=DevMeta):
 
     def __init__(self,  name, channel, slaveid=1):
         ModbusSlaveContext.__init__(self, zero_mode=True)

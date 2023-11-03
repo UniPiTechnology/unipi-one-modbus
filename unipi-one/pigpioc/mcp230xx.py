@@ -1,4 +1,3 @@
-import six
 import logging
 import asyncio
 from pigpio import error as EPigpio
@@ -14,8 +13,7 @@ MCP23008_GPIO = 0x09  # input/output
 MCP23008_OLAT = 0x0A  # latch output status
 
 
-@six.add_metaclass(DevMeta)
-class Mcp230xx:
+class Mcp230xx(metaclass=DevMeta):
 
     def __init__(self, name, channel, i2cbus, address, num_gpios):
         self.name = name
