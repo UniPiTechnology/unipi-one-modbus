@@ -1,4 +1,3 @@
-import six
 import asyncio
 import logging
 
@@ -10,8 +9,7 @@ from .bus import PigBus
 from ..rpcmethods import DevMeta, get_kwargs, parse_name, check_dev_type
 from .. import rpcmethods as virtual
 
-@six.add_metaclass(DevMeta)
-class AiReg(virtual.RegisterProvider):
+class AiReg(virtual.RegisterProvider, metaclass=DevMeta):
 
     #__devname__  = 'inputs'
 

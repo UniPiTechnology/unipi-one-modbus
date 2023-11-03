@@ -1,4 +1,3 @@
-import six
 import asyncio
 import logging
 
@@ -8,8 +7,7 @@ from ..rpcmethods import DevMeta, get_kwargs, parse_name, check_dev_type
 from .. import rpcmethods as virtual
 
 
-@six.add_metaclass(DevMeta)
-class RegCoils(virtual.CoilProvider, virtual.RegisterProvider):
+class RegCoils(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMeta):
 
     def __init__(self, name, channel, pins, register, start_coil):
         self.name = name

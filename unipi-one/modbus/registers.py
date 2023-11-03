@@ -1,15 +1,12 @@
 import asyncio
 import logging
 
-import six
-
 from .slavemap import ModbusSlaveMap
 from .. import rpcmethods as virtual
 from ..rpcmethods import DevMeta, get_kwargs, check_dev_type
 
 
-@six.add_metaclass(DevMeta)
-class ModbusRegisters:
+class ModbusRegisters(metaclass=DevMeta):
 
     def __init__(self,  name, channel, mode, devs=[]):
         self.name = name

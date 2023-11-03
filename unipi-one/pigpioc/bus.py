@@ -4,7 +4,6 @@ import struct
 from pigpio import u2i, _u2i
 import pigpio
 import asyncio
-import six
 import socket
 import logging
 from contextlib import suppress
@@ -12,8 +11,7 @@ from contextlib import suppress
 from ..rpcmethods import DevMeta, get_kwargs
 
 
-@six.add_metaclass(DevMeta)
-class PigBus:
+class PigBus(metaclass=DevMeta):
 
     def __init__(self,  name, host='localhost', port=8888):
 

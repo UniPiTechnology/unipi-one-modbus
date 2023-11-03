@@ -2,7 +2,6 @@
 
 # Analog Inputs on MCP 342x
 
-import six
 import logging
 import asyncio
 
@@ -10,8 +9,7 @@ from .bus import PigBus
 from ..rpcmethods import DevMeta, get_kwargs, parse_name, check_dev_type
 
 
-@six.add_metaclass(DevMeta)
-class Mcp342x:
+class Mcp342x(metaclass=DevMeta):
 
     BIT_MASKS = (
         (  0x7ff, 3, 1.0 / 240), #12bit including sign: maxvalue, datalength, waittime (= 1 / sample rate)

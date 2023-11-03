@@ -2,8 +2,6 @@ import asyncio
 import logging
 from contextlib import suppress
 
-import six
-
 from .. import __version__ as unipi_one_version
 from pymodbus.datastore import (
     ModbusSequentialDataBlock,
@@ -24,8 +22,7 @@ from ..rpcmethods import DevMeta, get_kwargs
 #_logger.setLevel(logging.INFO)
 
 
-@six.add_metaclass(DevMeta)
-class ModbusServer:
+class ModbusServer(metaclass=DevMeta):
 
     info_name={
         "VendorName": "Unipi Technology",
@@ -33,7 +30,7 @@ class ModbusServer:
         "VendorUrl": "https://unipi.technology/",
         "ProductName": "Unipi1 Modbus Server",
         "ModelName": "Unipi 1.1/Unipi Lite",
-        "MajorMinorRevision": unipi-one_version,
+        "MajorMinorRevision": unipi_one_version,
     }
 
     def __init__(self,  name, host='localhost', port=503):
