@@ -1,0 +1,98 @@
+
+-   name: server503
+    type: modbus.server
+    port: 503
+    host: 127.0.0.1
+    childs:
+        1:
+            type: modbus.slavemap
+            childs:
+                registers:
+                    type: modbus.registers
+                    mode: registers
+                    devs: [ relays1, inp1, inp2, inp3, inp4, inp5, inp5, inp6, inp7, inp8, inp9, inp10, inp11, inp12, ao1, ai1, ai2 ]
+                coils:
+                    type: modbus.registers
+                    mode: coils
+                    devs: [ relays1, inp1, inp2, inp3, inp4, inp5, inp5, inp6, inp7, inp8, inp9, inp10, inp11, inp12 ]
+
+-   name: unipi11
+    type: pigpioc.bus
+    childs:
+        gpio:
+            type: pigpioc.gpiochip
+            childs:
+                4:  inp1
+                17: inp2
+                27: inp3
+                23: inp4
+                22: inp5
+                24: inp6
+                11: inp7
+                7:  inp8
+                8:  inp9
+                9:  inp10
+                25: inp11
+                10: inp12
+                18: ao1
+        i2c1:
+            type: pigpioc.i2cbus
+            name: unipi1_i2cbus
+            childs:
+                0x20:
+                    type: pigpioc.mcp230xx
+                    childs:
+                        __all__: relays1
+                0x68:
+                    type: pigpioc.mcp342x
+                    childs:
+                        0: ai1
+                        1: ai2
+
+
+-   { name: relays1, type: pigpioc.regcoils, start_coil: 0, register: 1, pins: [ 7, 6, 5, 4, 3, 2, 1, 0 ] }
+-   { name: inp1,  type: pigpioc.input, input: 8,  register: 0, reg_bit: 0,  debounce_reg: 1010, counter_reg: 7, debounce: 20 }
+-   { name: inp2,  type: pigpioc.input, input: 9,  register: 0, reg_bit: 1,  debounce_reg: 1011, counter_reg: 9  }
+-   { name: inp3,  type: pigpioc.input, input: 10, register: 0, reg_bit: 2,  debounce_reg: 1012, counter_reg: 11 }
+-   { name: inp4,  type: pigpioc.input, input: 11, register: 0, reg_bit: 3,  debounce_reg: 1013, counter_reg: 13 }
+-   { name: inp5,  type: pigpioc.input, input: 12, register: 0, reg_bit: 4,  debounce_reg: 1014, counter_reg: 15 }
+-   { name: inp6,  type: pigpioc.input, input: 13, register: 0, reg_bit: 5,  debounce_reg: 1015, counter_reg: 17 }
+-   { name: inp7,  type: pigpioc.input, input: 14, register: 0, reg_bit: 6,  debounce_reg: 1016, counter_reg: 19 }
+-   { name: inp8,  type: pigpioc.input, input: 15, register: 0, reg_bit: 7,  debounce_reg: 1017, counter_reg: 21 }
+-   { name: inp9,  type: pigpioc.input, input: 16, register: 0, reg_bit: 8,  debounce_reg: 1018, counter_reg: 23 }
+-   { name: inp10, type: pigpioc.input, input: 17, register: 0, reg_bit: 9,  debounce_reg: 1019, counter_reg: 25 }
+-   { name: inp11, type: pigpioc.input, input: 18, register: 0, reg_bit: 10, debounce_reg: 1020, counter_reg: 27 }
+-   { name: inp12, type: pigpioc.input, input: 19, register: 0, reg_bit: 11, debounce_reg: 1021, counter_reg: 29 }
+-   { name: ao1,   type: pigpioc.pwmout,           register: 2,             frequency_reg: 1022 }
+-   { name: ai1,   type: pigpioc.aireg,            register: 3,            resolution_reg: 1023, calibration: 11.419}
+-   { name: ai2,   type: pigpioc.aireg,            register: 5,            resolution_reg: 1024, calibration: 11.419 }
+
+
+### Extension as board with 8 relay connected to mcp230x chip via unipi_i2cbus
+### Presented on Modbus server503 as slave id=2
+
+# Hw board with mcp230xx (address=0x21) connected to unipi_i2cbus 
+-   name: extension2
+    type: pigpioc.mcp230xx
+    channel: unipi_i2cbus
+    address: 0x21
+    childs:
+        __all__: relays2
+
+# 8 relays connected to chip extension2, presented on Modbus as coil 0-7 and register 1
+-   { name: relays2, type: pigpioc.regcoils, start_coil: 0, register: 1, pins: [ 7, 6, 5, 4, 3, 2, 1, 0 ] }
+
+# define modbus slave connected to Modbus server503 as slave 2. Define register and coil maps
+-   name: modbus_slave_2
+    type: modbus.slavemap
+    channel: server503
+    address: 2
+    childs:
+        registers:
+            type: modbus.registers
+            mode: registers
+            devs: [ relays2 ]
+        coils:
+            type: modbus.registers
+            mode: coils
+            devs: [ relays2 ]

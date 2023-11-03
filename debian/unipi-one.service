@@ -1,0 +1,19 @@
+[Unit]
+Description=Unipi 1.x ModBus Server
+before=evok.service
+After=pigpiod.service
+StartLimitIntervalSec=300
+
+[Service]
+Type=simple
+ExecStart=/opt/evok/bin/python /opt/evok/lib/python3.11/site-packages/evok/evok.py
+TimeoutStopSec=3
+SyslogLevel=debug
+SyslogIdentifier=unipi-one
+StandardOutput=null
+WorkingDirectory=/opt/evok
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

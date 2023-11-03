@@ -1,0 +1,7 @@
+include:
+    project: docker/template
+    file: debian-pkg-ng.yaml
+variables:
+    package_name: "unipi-one"
+    build_for_architecture: "arm64"
+    build_for_distribution: "newstable"
