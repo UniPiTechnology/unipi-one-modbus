@@ -26,8 +26,7 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 #include = [ "unipi_one" ]
-exclude = [ "configs" ]
-#namespaces = false  # to disable scanning PEP 420 namespaces (true by default)
+exclude = [ "configs", "run.d" ]
 #packages = [ "unipi_one" ]
 
 [project.scripts]
