@@ -12,17 +12,74 @@ from queue import Queue
 from .rpcmethods import *
 
 default_log_level = logging.INFO
+default_config_d = "/etc/unipi-one.d"
 default_config = "/etc/unipi-one.yaml"
 break_on_errors = False
 
 ############################## YAML Configuration ###################################
 def LoadYamlConfig(path):
+
     with open(path, 'r') as stream:
         try:
-            return yaml.safe_load(stream)
+            return yaml.load(stream, Loader=yaml.SafeLoader)
         except yaml.YAMLError as E:
             logging.critical("Yaml error: %s", str(E))
             raise SystemExit() 
+
+
+def LoadYamlDirectory(path):
+
+    # - create stream as concatenation sorted files from directory
+    # - save name, size and line of original files to stream.parts - need in Exception handling
+    # - takes care of ending LF in each file
+
+    import io
+    stream = io.StringIO()
+    files = sorted([ f.path for f in os.scandir(path) if f.name.endswith('.yaml') and f.is_file() ])
+    stream.parts = []
+    stoplines = 0
+    for fname in files:
+        with open(fname, 'r') as f:
+            content = f.read()
+            if not content.endswith('\n'):
+                content += '\n'
+            lines = content.count('\n')
+            stoplines += lines
+            stream.write(content)
+            position = stream.tell()
+            stream.parts.append(dict(fname=fname, stop=position, size=len(content), stoplines=stoplines, lines=lines))
+
+    stream.seek(0)
+
+    # parse concataned Yaml stream
+    try:
+        return yaml.load(stream, Loader=yaml.SafeLoader)
+
+    except yaml.reader.ReaderError as E:
+        for part in stream.parts:
+            if part['stop'] > E.position:
+                E.name = part["fname"]
+                E.position = E.position - (part['stop'] - part["size"])
+                break
+        logging.critical("Yaml read error: %s", str(E))
+
+    except yaml.YAMLError as E:
+        if isinstance(E, yaml.MarkedYAMLError):
+            if E.problem_mark:
+                for part in stream.parts:
+                    if part['stoplines'] > E.problem_mark.line:
+                        E.problem_mark.name = part["fname"]
+                        E.problem_mark.line = E.problem_mark.line - (part['stoplines'] - part["lines"])
+                        break
+            if E.context_mark:
+                for part in stream.parts:
+                    if part['stoplines'] > E.context_mark.line:
+                        E.context_mark.name = part["fname"]
+                        E.context_mark.line = E.context_mark.line - (part['stoplines'] - part["lines"])
+                        break
+
+        logging.critical("Yaml error: %s", str(E))
+    raise SystemExit() 
 
 
 def LoadList(nodelist, parent):
@@ -123,19 +180,25 @@ def setup(args):
     if args.config:
         path = args.config
     else:
-        path = default_config
-        if not os.path.isfile(path):
-            path = os.path.dirname(os.path.realpath(__file__)) +'/'+\
-                   os.path.basename(default_config)
+        path = default_config_d
+        if not os.path.isdir(path):
+            path = default_config
+            if not os.path.isfile(path):
+                path = os.path.dirname(os.path.realpath(__file__)) +'/'+\
+                       os.path.basename(default_config)
 
-    if not os.path.isfile(path):
-        raise Exception('Missing config file %s', path)
+    if os.path.isdir(path):
+        logging.info("Loading config from directory: %s", path)
+        nodelist = LoadYamlDirectory(path)
 
-    logging.info("Loading config file: %s", path)
+    elif os.path.isfile(path):
+        logging.info("Loading config file: %s", path)
+        nodelist = LoadYamlConfig(path)
 
-    nodelist = LoadYamlConfig(path)
+    else:
+        raise Exception('Missing config file or directory %s', path)
+
     LoadList(nodelist, None)
-
     # start Queue logging - to be asyncio compatible
     setup_logging_queue()
 
