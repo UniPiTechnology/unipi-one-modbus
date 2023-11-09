@@ -1,0 +1,63 @@
+-   type: modbus.slavemap
+    channel: *main_server
+    slaveid: 1
+    childs:
+    -   type: modbus.registers
+        mode: registers
+        devs: [ REx8, DI1, DI2, DI3, DI4, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI12, AI1, AI2, AO1 ]
+    -   type: modbus.registers
+        mode: coils
+        devs: [ REx8, DI1, DI2, DI3, DI4, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI12 ]
+
+
+-   name: GPIODI
+    type: gpiod.gpionotify
+    chip_path: /run/unipi-plc/by-sys/DI/gpiochip
+    #chip_path: /dev/gpiochip0
+    childs:
+        - { name: DI1,  type: gpiod.input, pin: 4,  input: 8,  register: 0, reg_bit: 0,  debounce_reg: 1010, counter_reg: 7, debounce: 0 }
+        - { name: DI2,  type: gpiod.input, pin: 17, input: 9,  register: 0, reg_bit: 1,  debounce_reg: 1011, counter_reg: 9, debounce: 0  }
+        - { name: DI3,  type: gpiod.input, pin: 27, input: 10, register: 0, reg_bit: 2,  debounce_reg: 1012, counter_reg: 11, debounce: 0 }
+        - { name: DI4,  type: gpiod.input, pin: 23, input: 11, register: 0, reg_bit: 3,  debounce_reg: 1013, counter_reg: 13, debounce: 0 }
+        - { name: DI5,  type: gpiod.input, pin: 22, input: 12, register: 0, reg_bit: 4,  debounce_reg: 1014, counter_reg: 15, debounce: 0 }
+        - { name: DI6,  type: gpiod.input, pin: 24, input: 13, register: 0, reg_bit: 5,  debounce_reg: 1015, counter_reg: 17, debounce: 0 }
+        - { name: DI7,  type: gpiod.input, pin: 11, input: 14, register: 0, reg_bit: 6,  debounce_reg: 1016, counter_reg: 19, debounce: 0 }
+        - { name: DI8,  type: gpiod.input, pin: 7 , input: 15, register: 0, reg_bit: 7,  debounce_reg: 1017, counter_reg: 21, debounce: 0 }
+        - { name: DI9,  type: gpiod.input, pin: 8 , input: 16, register: 0, reg_bit: 8,  debounce_reg: 1018, counter_reg: 23, debounce: 0 }
+        - { name: DI10, type: gpiod.input, pin: 9 , input: 17, register: 0, reg_bit: 9,  debounce_reg: 1019, counter_reg: 25, debounce: 0 }
+        - { name: DI11, type: gpiod.input, pin: 25, input: 18, register: 0, reg_bit: 10, debounce_reg: 1020, counter_reg: 27, debounce: 0 }
+        - { name: DI12, type: gpiod.input, pin: 10, input: 19, register: 0, reg_bit: 11, debounce_reg: 1021, counter_reg: 29, debounce: 0 }
+
+-   name: GPIORO
+    type: gpiod.gpiochip
+    chip_path: /run/unipi-plc/by-sys/RO/gpiochip
+    childs:
+        -   name: REx8
+            type: gpiod.regcoils
+            start_coil: 0
+            register: 1
+            pins: [ 7, 6, 5, 4, 3, 2, 1, 0 ]
+
+
+-   name: ADC1
+    type: iio.mcp342x
+    iioname: 1-0068
+    childs:
+        -   name: AI1
+            type: iio.aireg
+            port: 0
+            calibration: *calibration1
+            register: 3
+            resolution_reg: 1023
+        -   name: AI2
+            type: iio.aireg
+            port: 1
+            calibration: *calibration2 #11.419
+            register: 5
+            resolution_reg: 1024
+
+-   name: AO1
+    type: iio.pwmout
+    register: 2
+    frequency_reg: 1022
+    falling: 1

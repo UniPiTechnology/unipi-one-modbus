@@ -8,11 +8,12 @@ class PwmOut(virtual.RegisterProvider, metaclass=DevMeta):
 
     #__devname__  = 'inputs'
 
-    def __init__(self, name, path, frequency, register, frequency_reg):
+    def __init__(self, name, path, frequency, register, frequency_reg, falling ):
         self.name = name
         self.circuit = parse_name(name)
         self.register = register
         self.frequency_reg = frequency_reg
+        self.falling = falling
         self.value = 0
 
         self.frequency = frequency
@@ -43,7 +44,8 @@ class PwmOut(virtual.RegisterProvider, metaclass=DevMeta):
             if type(value) in (list, tuple): value = value[0]
             value = min(max(value,0),1000)
             async with self.running_lock:
-                await self.write_attr('duty_cycle', max(int(round((value+self.offset)*self.mul, 0)), 0))
+                rvalue = value if not self.falling else 1000-value
+                await self.write_attr('duty_cycle', max(int(round(((rvalue)+self.offset)*self.mul, 0)), 0))
                 self.value = value #await self.channel.pwm_getduty(self.pin)
             if hasattr(self,'rdatastore'):
                 self.rdatastore[self.register] = self.value
@@ -75,8 +77,9 @@ class PwmOut(virtual.RegisterProvider, metaclass=DevMeta):
     async def run(self):
         period = int(1000000000 / self.frequency)    # period = 1GHz / f
         self.mul = period / 1000.0
+        rvalue = self.value if not self.falling else 1000-self.value
         await self.write_attr('period', period)
-        await self.write_attr('duty_cycle', max(int(round((self.value+self.offset)*self.mul, 0)), 0))
+        await self.write_attr('duty_cycle', max(int(round((rvalue+self.offset)*self.mul, 0)), 0))
         await self.write_attr('enable', 1)
         logging.debug(f"PWM event {self.name} {self.value} {self.frequency}")
 
@@ -91,6 +94,7 @@ Foptions = {
     'frequency': {'type': int, 'help': 'Frequency of PWM in Hz. Default 1000Hz', 'default': 1000 },
     'register':  {'type': int, 'help': 'Register in modbus map containing output value', 'default': 0 },
     'frequency_reg': {'type': int, 'help': 'Register in modbus map containing frequency in Hz', 'default': 1010 },
+    'falling': {'type': int, 'help': 'Set it to 1 for Unipi 1.0 board', 'default': 0 },
 }
 
 def YFactory(Node, devname, parent = None):
