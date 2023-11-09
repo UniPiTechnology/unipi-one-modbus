@@ -27,16 +27,16 @@ class NotifyPipeProtocol(asyncio.BaseProtocol):
                          for mask, cb in self.notify_callbacks.items()))
                 [ asyncio.create_task(coro) for coro in coros ]
             except Exception as E:
-                logging.error(f"Notify connect callback error: {str(E)}")
+                logging.error(f"Pigpio notify connect callback error: {str(E)}")
 
     def connection_lost(self, exc):
-        logging.debug(f"Notify connection closed")
+        logging.debug(f"Pigpio notify connection closed")
 
     def data_received(self, data):
         ''' callback from loop 
             reading data in 12 bytes chunks
         '''
-        logging.debug(f"Notify data received {len(data)} {repr(data)}")
+        logging.debug(f"Pigpio notify data received {len(data)} {repr(data)}")
         position = 0
         length = len(data)
         while position+12 <= length:

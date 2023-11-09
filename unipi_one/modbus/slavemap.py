@@ -21,7 +21,7 @@ class ModbusSlaveMap(ModbusSlaveContext,metaclass=DevMeta):
 
 
     def check(self):
-        channel = check_dev_type(self.channel, ModbusServer, 'Modbus server %s'%self.name, 'channell')
+        channel = check_dev_type(self.channel, ModbusServer, 'Modbus server %s'%self.name, 'channel')
         channel.register_slave(self, self.slaveid)
         self.channel = channel
         self.channel.register_slave(self.slaveid, self)
