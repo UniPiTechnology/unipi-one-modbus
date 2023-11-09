@@ -1,0 +1,14 @@
+-   name: &main_server MODBUS_SERVER_503 
+    type: modbus.server
+    port: 503
+    host: 127.0.0.1
+    childs:
+    -   type: modbus.slavemap
+        slaveid: 1
+        childs:
+        -   type: modbus.registers
+            mode: registers
+            devs: [ REx8, DI1, DI2, DI3, DI4, DI5, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI2, AI1, AI2, AO1 ]
+        -   type: modbus.registers
+            mode: coils
+            devs: [ REx8, DI1, DI2, DI3, DI4, DI5, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI12 ]

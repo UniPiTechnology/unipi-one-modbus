@@ -10,7 +10,6 @@ Vcs-Browser: https://github.com/UniPiTechnology/unipi-one/
 
 Package: unipi-one
 Architecture: any
-Pre-Depends: dpkg (>= 1.21.1), python3, ucf, ${misc:Pre-Depends}, ${shlibs:Depends}
-Depends: pigpiod, ${misc:Depends}
+Depends: ${misc:Depends}, python3 (>= 3.11~), libiio0
 Recommends: unipi-os-configurator
 Description: Unipi Modbus server for Unipi 1.x/Lite device

@@ -1,0 +1,23 @@
+-   type: modbus.slavemap
+    channel: *main_server
+    slaveid: 4
+    childs:
+    -   type: modbus.registers
+        mode: registers
+        devs: [ RE4x8 ]
+    -   type: modbus.registers
+        mode: coils
+        devs: [ RE4x8 ]
+
+
+-   name: GPIORO4
+    type: gpiod.gpiochip
+    chip_path: /dev/gpiochip5
+    childs:
+        -   name: RE4x8
+            type: gpiod.regcoils
+            start_coil: 0
+            register: 1
+            pins: [ 7, 6, 5, 4, 3, 2, 1, 0 ]
+
+
