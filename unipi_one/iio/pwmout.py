@@ -75,17 +75,21 @@ class PwmOut(virtual.RegisterProvider, metaclass=DevMeta):
 
 
     async def run(self):
-        period = int(1000000000 / self.frequency)    # period = 1GHz / f
-        self.mul = period / 1000.0
-        rvalue = self.value if not self.falling else 1000-self.value
-        await self.write_attr('period', period)
-        await self.write_attr('duty_cycle', max(int(round((rvalue+self.offset)*self.mul, 0)), 0))
-        await self.write_attr('enable', 1)
-        logging.debug(f"PWM event {self.name} {self.value} {self.frequency}")
+        try:
+            period = int(1000000000 / self.frequency)    # period = 1GHz / f
+            self.mul = period / 1000.0
+            rvalue = self.value if not self.falling else 1000-self.value
+            await self.write_attr('period', period)
+            await self.write_attr('duty_cycle', max(int(round((rvalue+self.offset)*self.mul, 0)), 0))
+            await self.write_attr('enable', 1)
+            logging.debug(f"PWM event {self.name} {self.value} {self.frequency}")
 
-        if hasattr(self,'rdatastore'):
-            self.rdatastore[self.register] = self.value # ToDo: konverze ?
-            self.rdatastore[self.frequency_reg] = self.frequency
+            if hasattr(self,'rdatastore'):
+                self.rdatastore[self.register] = self.value # ToDo: konverze ?
+                self.rdatastore[self.frequency_reg] = self.frequency
+        except Exception as E:
+            logging.error(f"Pwm start error: {str(E)}")
+
 
 
 Foptions = {

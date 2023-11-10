@@ -12,7 +12,7 @@
 
 -   name: GPIODI
     type: gpiod.gpionotify
-    chip_path: /run/unipi-plc/by-sys/DI/gpiochip
+    chip_path: /dev/gpiochip0
     #chip_path: /dev/gpiochip0
     childs:
         - { name: DI1,  type: gpiod.input, pin: 4,  input: 8,  register: 0, reg_bit: 0,  debounce_reg: 1010, counter_reg: 7, debounce: 0 }
