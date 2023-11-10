@@ -4,5 +4,5 @@
 # device eeprom
 
 -   name: _constants
-    value1: &calibration1  11.419
-    value2: &calibration2  11.419
+    value1: &calibration1  5.561
+    value2: &calibration2  5.561
