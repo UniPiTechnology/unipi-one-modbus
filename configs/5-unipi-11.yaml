@@ -1,6 +1,6 @@
 -   type: modbus.slavemap
     channel: *main_server
-    slaveid: 1
+    slaveid: 0
     childs:
     -   type: modbus.registers
         mode: registers

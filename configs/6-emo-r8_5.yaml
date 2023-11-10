@@ -1,20 +1,20 @@
 -   type: modbus.slavemap
     channel: *main_server
-    slaveid: 4
+    slaveid: 5
     childs:
     -   type: modbus.registers
         mode: registers
-        devs: [ RE4x8 ]
+        devs: [ RO_EMO_5 ]
     -   type: modbus.registers
         mode: coils
-        devs: [ RE4x8 ]
+        devs: [ RO_EMO_5 ]
 
 
--   name: GPIORO4
+-   name: GPIORO_EMO5
     type: gpiod.gpiochip
-    chip_path: /dev/gpiochip5
+    chip_path: /run/unipi-plc/by-sys/RO_EMO5/gpiochip
     childs:
-        -   name: RE4x8
+        -   name: RO_EMO_5
             type: gpiod.regcoils
             start_coil: 0
             register: 1

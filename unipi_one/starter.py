@@ -259,6 +259,7 @@ def main():
     try:
         setup(args)
         asyncio.run(run(), debug=args.debug)
+        sys.exit(0)
 
     except Exception as E:
         logging.critical("Error %s %s", sys.exc_info()[0],sys.exc_info()[1])
