@@ -8,7 +8,7 @@
     host: 127.0.0.1
     childs:
     -   type: modbus.slavemap
-        slaveid: 1
+        slaveid: 0
         childs:
         -   type: modbus.registers
             mode: registers

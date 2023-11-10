@@ -1,6 +1,7 @@
 ![unipi logo](https://github.com/UniPiTechnology/evok/raw/master/www/evok/js/jquery/images/unipi-logo-short-cmyk.svg?sanitize=true "UniPi logo")
 
-# unipi-one - Modbus server for Unipi 1.x and Unipi Lite devices
+# unipi-one - Modbus TCP server for Unipi 1.x and Unipi Lite devices
+
 
 EVOK is the primary Web-services API for [NEURON], [AXON] and [UniPi 1.1] devices. It provides a RESTful interface over HTTP, a JSON-RPC interface, a WebSocket interface a SOAP interface and a bulk JSON interface to UniPi devices.
 
