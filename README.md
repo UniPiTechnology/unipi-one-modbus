@@ -7,7 +7,11 @@ Umoznuje ovladani jednotlivych vstupu a vystupu na Unipi 1x zarizenich pomoci pr
 
 ### Debian package installation
 
-    # add /etc/apt/source....
+    sudo su
+    echo "deb https://repo.unipi.technology/debian bookworm unipi1-main main" > /etc/apt/sources.list.d/unipi.list
+    wget https://repo.unipi.technology/debian/unipi_pub.gpg -O /etc/apt/trusted.gpg.d/unipi_pub.asc
+
+    apt update
     apt install unipi-os-configurator unipi-os-configurator-data
     apt install unipi-one
 
@@ -66,7 +70,6 @@ Apache License, Version 2.0
 
 ----
 Raspberry Pi is a trademark of the Raspberry Pi Foundation
-
 [api-docs.io]:https://evok-14.api-docs.io/1.11/
 [github repository]:https://github.com/UniPiTechnology/unipi-one
 [OpenSource image]:https://files.unipi.technology/s/public?path=%2FSoftware%2FOpen-Source%20Images
