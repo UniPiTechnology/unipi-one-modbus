@@ -42,9 +42,9 @@ class PwmOut(virtual.RegisterProvider, metaclass=DevMeta):
         try:
             assert(register == self.register)
             if type(value) in (list, tuple): value = value[0]
-            value = min(max(value,0),1000)
+            value = min(max(value,0),4000)
             async with self.running_lock:
-                rvalue = value if not self.falling else 1000-value
+                rvalue = value if not self.falling else 4000-value
                 await self.write_attr('duty_cycle', max(int(round(((rvalue)+self.offset)*self.mul, 0)), 0))
                 self.value = value #await self.channel.pwm_getduty(self.pin)
             if hasattr(self,'rdatastore'):
@@ -61,7 +61,7 @@ class PwmOut(virtual.RegisterProvider, metaclass=DevMeta):
                 period = int(1000000000 / value)
                 await self.write_attr('period', period)
                 self.frequency = value
-                self.mul = period / 1000.0
+                self.mul = period / 4000.0
             if hasattr(self,'rdatastore'):
                 self.rdatastore[self.frequency_reg] = self.frequency
         except Exception as E:
@@ -77,8 +77,8 @@ class PwmOut(virtual.RegisterProvider, metaclass=DevMeta):
     async def run(self):
         try:
             period = int(1000000000 / self.frequency)    # period = 1GHz / f
-            self.mul = period / 1000.0
-            rvalue = self.value if not self.falling else 1000-self.value
+            self.mul = period / 4000.0
+            rvalue = self.value if not self.falling else 4000-self.value
             await self.write_attr('period', period)
             await self.write_attr('duty_cycle', max(int(round((rvalue+self.offset)*self.mul, 0)), 0))
             await self.write_attr('enable', 1)

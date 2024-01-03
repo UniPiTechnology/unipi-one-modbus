@@ -7,5 +7,5 @@ __all__ = [
     "__version_full__",
 ]
 
-__version__ = "0.4"
+__version__ = "0.6"
 __version_full__ = f"[unipi-one, version {__version__}]"

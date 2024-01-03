@@ -2,7 +2,7 @@
 
 [ -f /etc/bootcmd.d/Makefile ] && exit 0
 
-CONFIG_INC=/boot/config_unipi.inc
+CONFIG_INC=$(dirname `readlink -f /boot/config.txt`)/config_unipi.inc
 
 # append to config file
 {
