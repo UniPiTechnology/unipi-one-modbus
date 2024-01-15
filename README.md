@@ -23,7 +23,7 @@ pip3 install -r ./requirements.txt
 ```
 Configuration needs to be created according to the template.
 It supports configuration via a directory (merges all .yaml files in the directory in alphabetical order)
-or the configuration is in one file (/etc/unipi-one/yaml).
+or the configuration is in one file (/etc/unipi-one.yaml).
 The hardware can be communicated either via a kernel module (recommended) or via the pigpiod daemon,
 which needs to be installed and started. See examples in the configs directory.
 For the kernel module option, overlays need to be added to /boot/config.txt.
@@ -44,20 +44,24 @@ dtoverlay=mcp23017,mcp23008,addr=0x22,noints
     sudo su
     apt-get remove unipi-one
     reboot
+
 ## Developer Note
-Do you feel like contributing to unipi-one, or perhaps have a neat idea for an improvement to our system? Great! We are open to all ideas. Get in touch with us via email to info at unipi DOT technology
-License
-============
+Do you feel like contributing to unipi-one, or perhaps have a neat idea for an improvement to our system? Great!
+We are open to all ideas.
+Get in touch with us via email to info at unipi DOT technology.
+
+## License
 Apache License, Version 2.0
+
 ----
 Raspberry Pi is a trademark of the Raspberry Pi Foundation
-[api-docs.io]:https://evok-14.api-docs.io/1.11/
-[github repository]:https://github.com/UniPiTechnology/unipi-one
-[OpenSource image]:https://files.unipi.technology/s/public?path=%2FSoftware%2FOpen-Source%20Images
-[IndieGogo]:https://www.indiegogo.com/projects/unipi-the-universal-raspberry-pi-add-on-board
-[NEURON]:https://www.unipi.technology/products/unipi-neuron-3?categoryId=2
-[UniPi 1.1]:https://www.unipi.technology/products/unipi-1-1-1-1-lite-19?categoryId=1
-[Axon]:https://www.unipi.technology/products/unipi-axon-135?categoryId=13
-[PIGPIO]:http://abyz.co.uk/rpi/pigpio/
-[our forum]:http://forum.unipi.technology/
-[instructions below]:https://github.com/UniPiTechnology/evok#installing-evok-for-neuron
+- [api-docs.io](https://evok-14.api-docs.io/1.11/)
+- [github repository](https://github.com/UniPiTechnology/unipi-one)
+- [OpenSource image](https://files.unipi.technology/s/public?path=%2FSoftware%2FOpen-Source%20Images)
+- [IndieGogo](https://www.indiegogo.com/projects/unipi-the-universal-raspberry-pi-add-on-board)
+- [NEURON](https://www.unipi.technology/products/unipi-neuron-3?categoryId=2)
+- [UniPi 1.1](https://www.unipi.technology/products/unipi-1-1-1-1-lite-19?categoryId=1)
+- [Axon](https://www.unipi.technology/products/unipi-axon-135?categoryId=13)
+- [PIGPIO](http://abyz.co.uk/rpi/pigpio/)
+- [our forum](http://forum.unipi.technology/)
+- [instructions below](https://github.com/UniPiTechnology/evok#installing-evok-for-neuron)
