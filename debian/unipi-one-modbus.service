@@ -6,9 +6,9 @@ StartLimitIntervalSec=300
 
 [Service]
 Type=simple
-ExecStart=/opt/unipi-one/bin/unipi-one -l
+ExecStart=/opt/unipi-one-modbus/bin/unipi-one-modbus -l
 TimeoutStopSec=3
-WorkingDirectory=/opt/unipi-one
+WorkingDirectory=/opt/unipi-one-modbus
 User=root
 Restart=always
 

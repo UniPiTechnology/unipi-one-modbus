@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "unipi-one"
+name = "unipi-one-modbus"
 version = "0.3"
 authors = [
   { name="Miroslav Ondra", email="ondra@unipi.technology" },
@@ -25,12 +25,12 @@ dependencies = [
 ]
 
 [tool.setuptools.packages.find]
-#include = [ "unipi_one" ]
+#include = [ "unipi_one_modbus" ]
 exclude = [ "configs", "run.d" ]
-#packages = [ "unipi_one" ]
+#packages = [ "unipi_one_modbus" ]
 
 [project.scripts]
-unipi-one = "unipi_one:main"
+unipi-one-modbus = "unipi_one_modbus:main"
 
 [project.urls]
 "Homepage" = "https://github.com/pypa/sampleproject"

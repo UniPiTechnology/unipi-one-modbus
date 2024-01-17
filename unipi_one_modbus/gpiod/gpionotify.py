@@ -67,7 +67,7 @@ class GpioChip(metaclass=DevMeta):
                         )
                     ) for pin in self.notify_callbacks))
             logging.debug(f"Open gpio notify {self.chip_path}")
-            self.request = gpiod.request_lines(self.chip_path, consumer="unipi-one", config=config)
+            self.request = gpiod.request_lines(self.chip_path, consumer="unipi-one-modbus", config=config)
             values = self.request.get_values()
             try:
                 coros = filter(lambda cor: asyncio.iscoroutine(cor),
