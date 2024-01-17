@@ -1,5 +1,5 @@
 ![unipi logo](https://github.com/UniPiTechnology/evok/raw/master/www/evok/js/jquery/images/unipi-logo-short-cmyk.svg?sanitize=true "UniPi logo")
-# unipi-one - Modbus TCP server for Unipi 1.x and Unipi Lite devices
+# unipi-one-modbus - Modbus TCP server for Unipi 1.x and Unipi Lite devices
 Allows control of individual inputs and outputs on Unipi 1x devices using the Modbus TCP protocol.
 
 ### Debian package installation
@@ -8,9 +8,9 @@ Allows control of individual inputs and outputs on Unipi 1x devices using the Mo
     wget https://repo.unipi.technology/debian/unipi_pub.gpg -O /etc/apt/trusted.gpg.d/unipi_pub.asc
     apt update
     apt install unipi-os-configurator unipi-os-configurator-data
-    apt install unipi-one
-This installation will install all necessary programs and attempt to automatically configure unipi-one
-Configuration is in the directory /etc/unipi-one.d
+    apt install unipi-one-modbus
+This installation will install all necessary programs and attempt to automatically configure unipi-one-modbus
+Configuration is in the directory /etc/unipi-one-modbus.d
 The Unipi 1x platform does not support automatic configuration of connected modules. When using the EMO-R8 extension,
 it is necessary to specify this module in the /etc/unipi-id directory.
 The procedure is specified in the '/etc/unipi-id/README.md' file from package 'unipi-os-configurator'.
@@ -23,7 +23,7 @@ pip3 install -r ./requirements.txt
 ```
 Configuration needs to be created according to the template.
 It supports configuration via a directory (merges all .yaml files in the directory in alphabetical order)
-or the configuration is in one file (/etc/unipi-one.yaml).
+or the configuration is in one file (/etc/unipi-one-modbus.yaml).
 The hardware can be communicated either via a kernel module (recommended) or via the pigpiod daemon,
 which needs to be installed and started. See examples in the configs directory.
 For the kernel module option, overlays need to be added to /boot/config.txt.
@@ -42,13 +42,8 @@ dtoverlay=mcp23017,mcp23008,addr=0x22,noints
 
 ### Removing Debian package installation
     sudo su
-    apt-get remove unipi-one
+    apt-get remove unipi-one-modbus
     reboot
-
-## Developer Note
-Do you feel like contributing to unipi-one, or perhaps have a neat idea for an improvement to our system? Great!
-We are open to all ideas.
-Get in touch with us via email to info at unipi DOT technology.
 
 ## License
 Apache License, Version 2.0
