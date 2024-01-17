@@ -2,6 +2,6 @@ include:
     project: docker/template
     file: debian-pkg-ng.yaml
 variables:
-    package_name: "unipi-one"
+    package_name: "unipi-one-modbus"
     build_for_product: "unipi1 unipi1x64"
     build_for_distribution: "newstable"

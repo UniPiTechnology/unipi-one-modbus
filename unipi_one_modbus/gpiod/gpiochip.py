@@ -79,7 +79,7 @@ class GpioChip(metaclass=DevMeta):
             config = dict(((pin, gpiod.LineSettings(direction=Direction.OUTPUT)
                            ) for pin in self.pins))
             logging.debug(f"Open gpio chip {self.chip_path}")
-            self.request = gpiod.request_lines(self.chip_path, consumer="unipi-one", config=config) #, output_values={0:0,1:0})
+            self.request = gpiod.request_lines(self.chip_path, consumer="unipi-one-modbus", config=config) #, output_values={0:0,1:0})
 
             lines = list(self.pins)
             values = await asyncio.to_thread(self.request.get_values, lines)

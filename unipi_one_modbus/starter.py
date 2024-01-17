@@ -12,8 +12,8 @@ from queue import Queue
 from .rpcmethods import *
 
 default_log_level = logging.INFO
-default_config_d = "/etc/unipi-one.d"
-default_config = "/etc/unipi-one.yaml"
+default_config_d = "/etc/unipi-one-modbus.d"
+default_config = "/etc/unipi-one-modbus.yaml"
 break_on_errors = False
 
 ############################## YAML Configuration ###################################

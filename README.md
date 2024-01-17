@@ -1,6 +1,6 @@
 ![unipi logo](https://github.com/UniPiTechnology/evok/raw/master/www/evok/js/jquery/images/unipi-logo-short-cmyk.svg?sanitize=true "UniPi logo")
 
-# unipi-one - Modbus TCP server for Unipi 1.x and Unipi Lite devices
+# unipi-one-modbus - Modbus TCP server for Unipi 1.x and Unipi Lite devices
 
 Umoznuje ovladani jednotlivych vstupu a vystupu na Unipi 1x zarizenich pomoci protokolu Modbus TCP.
 
@@ -13,10 +13,10 @@ Umoznuje ovladani jednotlivych vstupu a vystupu na Unipi 1x zarizenich pomoci pr
 
     apt update
     apt install unipi-os-configurator unipi-os-configurator-data
-    apt install unipi-one
+    apt install unipi-one-modbus
 
-Tato instalace nainstaluje vsechny potrebne programy a pokusi se automaticky zkonfigurovat unipi-one
-Konfigurace je v adresari /etc/unipi-one.d
+Tato instalace nainstaluje vsechny potrebne programy a pokusi se automaticky zkonfigurovat unipi-one-modbus
+Konfigurace je v adresari /etc/unipi-one-modbus.d
 
 Platforma Unipi 1x nepodporuje automatickou konfiguraci pripojenych modulu. Pokud pouzivate extension EMO-R8,
 je potreba uvest tento modul do adresare /etc/unipi-id. Postup je uveden v souboru /etc/unipi-id/README.md
@@ -33,7 +33,7 @@ Vyzaduje python3, libiio0 nebo pigpiod
 Konfiguraci je potreba vytvorit podle vzoru.
 
 Je podporovana konfigurace pomoci adresare (slouci se vsechny .yaml soubory v adresari podle abecedniho poradi)
-nebo je konfigurace v jednom souboru (/etc/unipi-one/yaml)
+nebo je konfigurace v jednom souboru (/etc/unipi-one-modbus/yaml)
 
 S hardware lze komunikovat bud prostrednictvim kernel modulu (doporuceno) nebo prostrednictvim demona pigpiod,
 ktery je nutno si nainstalovat a spustit. Viz priklady v adresari configs
@@ -55,14 +55,14 @@ Pripadne pokud pozivate EMO-R8
 ### Debian package installation
 
     sudo su
-    apt-get remove unipi-one
+    apt-get remove unipi-one-modbus
     reboot
 
 ### Script installation
 
 ## Developer Note
 
-Do you feel like contributing to unipi-one, or perhaps have a neat idea for an improvement to our system? Great! We are open to all ideas. Get in touch with us via email to info at unipi DOT technology
+Do you feel like contributing to unipi-one-modbus, or perhaps have a neat idea for an improvement to our system? Great! We are open to all ideas. Get in touch with us via email to info at unipi DOT technology
 
 License
 ============
