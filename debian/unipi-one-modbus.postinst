@@ -1,5 +1,5 @@
 #!/bin/sh
-# postinst script for unipi-one
+# postinst script for unipi-one-modbus
 #
 # see: dh_installdeb(1)
 
@@ -11,8 +11,8 @@ case "$1" in
 		/opt/unipi/tools/os-configurator --force
 	else
 		echo "Installing default config for Unipi 1.1"
-		[ -e /etc/unipi-one/0-autocal.yaml ] || ln -s /usr/share/unipi-one/0-autocal.yaml /etc/unipi-one/
-		[ -e /etc/unipi-one/5-unipi-11.yaml ] || ln -s /usr/share/unipi-one/5-unipi-11.yaml /etc/unipi-one/
+		[ -e /etc/unipi-one-modbus/0-autocal.yaml ] || ln -s /usr/share/unipi-one-modbus/0-autocal.yaml /etc/unipi-one-modbus/
+		[ -e /etc/unipi-one-modbus/5-unipi-11.yaml ] || ln -s /usr/share/unipi-one-modbus/5-unipi-11.yaml /etc/unipi-one-modbus/
 	fi
 
 	#mkdir -p /etc/bootcmd.d/src

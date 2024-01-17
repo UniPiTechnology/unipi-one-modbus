@@ -10,7 +10,7 @@
 export DH_VIRTUALENV_INSTALL_ROOT=/opt
 export DH_VIRTUALENV_ARGUMENTS
 export DH_VERBOSE=1
-export PYBUILD_NAME=unipi-one
+export PYBUILD_NAME=unipi-one-modbus
 #export PYBUILD_INSTALL_ARGS=--install-lib=/usr/share/packagename/
 
 # see ENVIRONMENT in dpkg-buildflags(1)
@@ -26,8 +26,8 @@ export PYBUILD_NAME=unipi-one
 ##   which is invoked using dpkg-buildpackage --build=any
 override_dh_virtualenv:
 	dh_virtualenv
-	sed 's#/opt/unipi-one/bin/python#debian/unipi-one/opt/unipi-one/bin/python#' -i debian/unipi-one/opt/unipi-one/bin/pip3
-	debian/unipi-one/opt/unipi-one/bin/pip3 uninstall -y setuptools wheel pip
+	sed 's#/opt/unipi-one-modbus/bin/python#debian/unipi-one-modbus/opt/unipi-one-modbus/bin/python#' -i debian/unipi-one-modbus/opt/unipi-one-modbus/bin/pip3
+	debian/unipi-one-modbus/opt/unipi-one-modbus/bin/pip3 uninstall -y setuptools wheel pip
 
 #	dh_virtualenv --break-system-packages
 

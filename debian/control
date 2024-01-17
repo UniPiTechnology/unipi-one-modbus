@@ -1,4 +1,4 @@
-Source: unipi-one
+Source: unipi-one-modbus
 Section: python
 Priority: optional
 Maintainer: Miroslav Ondra <ondra@unipi.technology>
@@ -8,7 +8,7 @@ Homepage: http://www.unipi.technology
 Vcs-Git: https://github.com/UniPiTechnology/unipi-one.git
 Vcs-Browser: https://github.com/UniPiTechnology/unipi-one/
 
-Package: unipi-one
+Package: unipi-one-modbus
 Architecture: any
 Depends: ${misc:Depends}, python3 (>= 3.11~), libiio0
 Recommends: unipi-os-configurator
