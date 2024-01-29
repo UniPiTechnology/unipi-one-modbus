@@ -11,5 +11,7 @@ Vcs-Browser: https://github.com/UniPiTechnology/unipi-one/
 Package: unipi-one-modbus
 Architecture: any
 Depends: ${misc:Depends}, python3 (>= 3.11~), libiio0
+Replaces: unipi-one
+Breaks: unipi-one
 Recommends: unipi-os-configurator
 Description: Unipi Modbus server for Unipi 1.x/Lite device
