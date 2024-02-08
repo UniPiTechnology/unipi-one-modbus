@@ -38,9 +38,11 @@ class GpiodInput(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMe
         datastore[self.counter_reg+1] = 0
         datastore[self.debounce_reg]  = 0
         self.rdatastore = datastore
-        return dict(((self.register, None), 
-                     (self.counter_reg, None), (self.counter_reg+1, None), 
-                     (self.debounce_reg, lambda reg,deb: self.set_debounce(deb[0]))))
+        return dict(((self.register, None),
+                     (self.counter_reg, lambda reg,deb: self.set_counter(deb[0], False)),
+                     (self.counter_reg+1, lambda reg,deb: self.set_counter(deb[0], True)),
+                     (self.debounce_reg, lambda reg,deb: self.set_debounce(deb[0])),
+                     ))
 
     def create_coil_map(self, datastore):
         datastore[self.input] = 0
@@ -49,7 +51,7 @@ class GpiodInput(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMe
 
     def set_reversed(self, reverse=True):
         '''  values from pigpio/rpi/unipi1 are default REVERSED
-        ''' 
+        '''
         self.reverse = reverse
         if reverse:
             self.to_value = lambda x: 0 if x==0 else 1
@@ -70,6 +72,16 @@ class GpiodInput(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMe
             #import traceback, sys
             #traceback.print_exc(file=sys.stdout)
 
+    async def set_counter(self, counter, is_high):
+        try:
+            i = self.counter_reg + 1 if is_high else self.counter_reg
+            if not is_high and counter < 65536:
+                # TODO: HOTFIX dokud nebude podporovan multiple write.
+                self.rdatastore[self.counter_reg+1] = 0
+            self.rdatastore[i] = counter
+            self.counter = self.rdatastore[self.counter_reg] + self.rdatastore[self.counter_reg+1] << 16
+        except Exception as E:
+            logging.error(f"DI {self.input} set_counter to {counter}: {str(E)}")
 
     def event0(self, level, tick, seq):
         self.value = self.to_value(level)
