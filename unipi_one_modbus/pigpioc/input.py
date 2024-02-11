@@ -41,8 +41,8 @@ class PigInput(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMeta
         datastore[self.debounce_reg]  = 0
         self.rdatastore = datastore
         return dict(((self.register, None),
-                     (self.counter_reg, lambda reg,deb: self.set_counter(deb[0], False)),
-                     (self.counter_reg+1, lambda reg,deb: self.set_counter(deb[0], True)),
+                     (self.counter_reg, self.set_counter),
+                     (self.counter_reg+1, self.set_counter),
                      (self.debounce_reg, lambda reg,deb: self.set_debounce(deb[0])),
                      ))
 
@@ -71,16 +71,18 @@ class PigInput(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMeta
         else:
             self.channel.register_callback(self.mask, self.event)
 
-    async def set_counter(self, counter, is_high):
+    async def set_counter(self, register, values):
         try:
-            i = self.counter_reg + 1 if is_high else self.counter_reg
-            if not is_high and counter < 65536:
-                # TODO: HOTFIX dokud nebude podporovan multiple write.
-                self.rdatastore[self.counter_reg+1] = 0
-            self.rdatastore[i] = counter
-            self.counter = self.rdatastore[self.counter_reg] + self.rdatastore[self.counter_reg+1] << 16
+            assert(register == self.counter_reg)
+            if len(values) < 2:
+                raise ValueError('Required 2 register values')
+            self.counter = values[0] + values[1] << 16
+            if hasattr(self,'rdatastore'):
+                self.rdatastore[register] = values[0]
+                self.rdatastore[register+1] = values[1]
         except Exception as E:
-            logging.error(f"DI {self.input} set_counter to {counter}: {str(E)}")
+            logging.error(f"DI {self.input} set_counter to {values[:2]}: {str(E)}")
+
 
     def event0(self, level, tick, seq):
         self.value = self.to_value(level)
