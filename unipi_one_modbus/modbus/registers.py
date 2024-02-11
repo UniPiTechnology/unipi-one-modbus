@@ -1,6 +1,8 @@
 import asyncio
 import logging
 
+from pymodbus.exceptions import ParameterException
+
 from .slavemap import ModbusSlaveMap
 from .. import rpcmethods as virtual
 from ..rpcmethods import DevMeta, get_kwargs, check_dev_type
@@ -66,18 +68,24 @@ class ModbusRegisters(metaclass=DevMeta):
         if not isinstance(values, list):
             values = [values]
         coros = []
-        leader = None
-        for idx in range(len(values)):
-            if address + idx not in self.setters:
-                raise ParameterException("Offset {address+idx} not in range")
-            if self.setters[address+idx] != leader:
-                leader = self.setters[address+idx]
-                if leader:
-                    logging.debug(f'ModbusRegiser: Calling setter {leader} with address={address + idx}, vals={values}')
-                    coro = leader(address + idx, values[idx:])
-                    if asyncio.iscoroutine(coro): coros.append(coro)
+        exc = None
+        try:
+            leader = None
+            for idx in range(len(values)):
+                if address + idx not in self.setters:
+                    raise ParameterException("Offset {address+idx} not in range")
+                if self.setters[address+idx] != leader:
+                    leader = self.setters[address+idx]
+                    if leader:
+                        logging.debug(f'ModbusRegiser: Calling setter {leader} with address={address + idx}, vals={values}')
+                        coro = leader(address + idx, values[idx:])
+                        if asyncio.iscoroutine(coro): coros.append(coro)
+        except Exception as E:
+            exc = E
         if coros:
             [ asyncio.create_task(coro) for coro in coros ]
+        if exc:
+            raise exc
 
 Foptions = {
     'channel': {'type': 'node', 'help': 'Link to Modbus slave map' },
