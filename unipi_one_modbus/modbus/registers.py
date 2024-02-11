@@ -74,7 +74,7 @@ class ModbusRegisters(metaclass=DevMeta):
                 leader = self.setters[address]
                 if leader:
                     logging.debug(f'ModbusRegiser: Calling setter {leader} with address={address + idx}, vals={values}')
-                    coro = leader(address + idx, values)
+                    coro = leader(address + idx, values[idx:])
                     if asyncio.iscoroutine(coro): coros.append(coro)
         if coros:
             [ asyncio.create_task(coro) for coro in coros ]
