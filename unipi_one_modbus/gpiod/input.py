@@ -82,7 +82,7 @@ class GpiodInput(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMe
                 self.rdatastore[register+1] = values[1]
         except Exception as E:
             logging.error(f"DI {self.name} set_counter to {values[:2]}: {str(E)}")
-
+            raise E
 
     def event0(self, level, tick, seq):
         self.value = self.to_value(level)

@@ -6,6 +6,12 @@ from pymodbus.datastore import (
     ModbusSequentialDataBlock,
     ModbusSlaveContext,
 )
+from pymodbus.exceptions import ParameterException
+
+from pymodbus.pdu import (
+    ExceptionResponse, 
+    ModbusExceptions
+)
 
 from ..rpcmethods import DevMeta, get_kwargs, check_dev_type
 from .server import ModbusServer
@@ -36,6 +42,23 @@ class ModbusSlaveMap(ModbusSlaveContext,metaclass=DevMeta):
         if datablock == None: datablock = ModbusSequentialDataBlock.create()
         for block in blocks: 
             self.store[block] = datablock
+
+    def setValues(self, fc_as_hex, address, values):
+        """Set the datastore with the supplied values.
+
+        :param fc_as_hex: The function we are working with
+        :param address: The starting address
+        :param values: The new values to be set
+        """
+        if not self.zero_mode:
+            address += 1
+        logging.debug("setValues[{}] address-{}: count-{}", fc_as_hex, address, len(values))
+        try:
+            self.store[self.decode(fc_as_hex)].setValues(address, values)
+        except ParameterException:
+            return ExceptionResponse(fc_as_hex, exception_code=ModbusExceptions.IllegalAddress)
+        except Exception:
+            return ExceptionResponse(fc_as_hex, exception_code=ModbusExceptions.IllegalValue)
 
 
 Foptions = {
