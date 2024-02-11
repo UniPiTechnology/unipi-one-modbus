@@ -68,21 +68,20 @@ class GpiodInput(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMe
             await self.channel.set_debounce(self.pin, self.debounce)
             self.rdatastore[self.debounce_reg] = self.debounce * 10
         except Exception as E:
-            logging.error(f"DI {self.input} set_debounce to {debounce}: {str(E)}")
+            logging.error(f"DI {self.name} set_debounce to {debounce}: {str(E)}")
             #import traceback, sys
             #traceback.print_exc(file=sys.stdout)
 
-    async def set_counter(self, register, values):
+    def set_counter(self, register, values):
         try:
-            assert(register == self.counter_reg)
-            if len(values) < 2:
+            if (register != self.counter_reg) or (len(values) < 2):
                 raise ValueError('Required 2 register values')
             self.counter = values[0] + values[1] << 16
             if hasattr(self,'rdatastore'):
                 self.rdatastore[register] = values[0]
                 self.rdatastore[register+1] = values[1]
         except Exception as E:
-            logging.error(f"DI {self.input} set_counter to {values[:2]}: {str(E)}")
+            logging.error(f"DI {self.name} set_counter to {values[:2]}: {str(E)}")
 
 
     def event0(self, level, tick, seq):

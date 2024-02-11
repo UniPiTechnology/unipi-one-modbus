@@ -70,15 +70,14 @@ class ModbusRegisters(metaclass=DevMeta):
         for idx in range(len(values)):
             if address + idx not in self.setters:
                 raise ParameterException("Offset {address+idx} not in range")
-            if self.setters[address] != leader:
-                leader = self.setters[address]
+            if self.setters[address+idx] != leader:
+                leader = self.setters[address+idx]
                 if leader:
                     logging.debug(f'ModbusRegiser: Calling setter {leader} with address={address + idx}, vals={values}')
                     coro = leader(address + idx, values[idx:])
                     if asyncio.iscoroutine(coro): coros.append(coro)
         if coros:
             [ asyncio.create_task(coro) for coro in coros ]
-
 
 Foptions = {
     'channel': {'type': 'node', 'help': 'Link to Modbus slave map' },
