@@ -25,7 +25,7 @@ The procedure is specified in the '/etc/unipi-id/README.md' file from package 'u
 
 The default Modbus server runs at the address 127.0.0.1 and port 503. It can be changed in the configuration file.
 
-##  Installation without unipi-os-configurator support and without packages
+###  Installation without unipi-os-configurator support and without packages
 Requires python3.11, libiio0 or pigpiod binaries and some python packages
 ```bash
 pip3 install -r ./requirements.txt
@@ -55,6 +55,11 @@ dtoverlay=mcp23017,mcp23008,addr=0x22,noints
     sudo su
     apt-get remove unipi-one-modbus
     reboot
+
+### Developer Note
+Do you feel like contributing to unipi-one-modbus, or perhaps have a neat idea for an improvement to our system?
+
+Great! We are open to all ideas. Get in touch with us via email to info at unipi DOT technology
 
 ## License
 Apache License, Version 2.0
