@@ -3,7 +3,7 @@
 Allows control of individual inputs and outputs on Unipi 1x devices using the Modbus TCP protocol.
 
 ### Debian package installation
-Requires OS based on Debian 12 (bookworm) like RaspiOS 64-bit or 32-bit
+Requires OS based on Debian 12 (bookworm) like [Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/) 64-bit or 32-bit
 
     sudo su
     echo "deb https://repo.unipi.technology/debian bookworm unipi1-main main" > /etc/apt/sources.list.d/unipi.list
