@@ -5,3 +5,5 @@ variables:
     package_name: "unipi-one-modbus"
     build_for_product: "unipi1 unipi1x64"
     build_for_distribution: "newstable"
+    publish_dst_url: "git@github.com:UniPiTechnology/unipi-one-modbus.git"
+    publish_to_remote: "yes"
