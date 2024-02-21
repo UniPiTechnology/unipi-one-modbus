@@ -1,6 +1,6 @@
 ![unipi logo](https://github.com/UniPiTechnology/evok/raw/master/www/evok/js/jquery/images/unipi-logo-short-cmyk.svg?sanitize=true "UniPi logo")
 # unipi-one-modbus - Modbus TCP server for Unipi 1.x and Unipi Lite devices
-Allows control of individual inputs and outputs on Unipi 1x devices using the Modbus TCP protocol.
+Allows control of individual inputs and outputs on Unipi 1x devices except 1Wire bus using the Modbus TCP protocol.
 
 ### Debian package installation
 Requires OS based on Debian 12 (bookworm) like [Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/) 64-bit or 32-bit
@@ -61,15 +61,11 @@ Do you feel like contributing to unipi-one-modbus, or perhaps have a neat idea f
 
 Great! We are open to all ideas. Get in touch with us via email to info at unipi DOT technology
 
-## License
+### License
 Apache License, Version 2.0
 
-----
-Raspberry Pi is a trademark of the Raspberry Pi Foundation
-- [github repository](https://github.com/UniPiTechnology/unipi-one)
-- [OpenSource image](https://files.unipi.technology/s/public?path=%2FSoftware%2FOpen-Source%20Images)
-- [IndieGogo](https://www.indiegogo.com/projects/unipi-the-universal-raspberry-pi-add-on-board)
+### Related
+
+- [Evok installation instructions](https://github.com/UniPiTechnology/evok?tab=readme-ov-file#legacy-installation-process-using-a-shell-script-required-for-unipi-11)
+- [GithHub repository](https://github.com/UniPiTechnology/unipi-one)
 - [Unipi 1.1](https://www.unipi.technology/products/unipi-1-1-1-1-lite-19?categoryId=1)
-- [PIGPIO](http://abyz.co.uk/rpi/pigpio/)
-- [our forum](http://forum.unipi.technology/)
-- [instructions below](https://github.com/UniPiTechnology/evok#installing-evok-for-neuron)
