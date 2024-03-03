@@ -1,4 +1,0 @@
-
-configs/*             usr/share/unipi-one-modbus
-configs/1-modbus.yaml etc/unipi-one-modbus.d
-run.d/*               opt/unipi/os-configurator/run.d

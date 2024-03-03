@@ -1,15 +1,22 @@
--   type: modbus.slavemap
-    channel: *main_server
-    slaveid: 0
+## section defines Modbus server
+-   name: MODBUS_SERVER_503 
+    type: modbus.server
+    port: 503
+    host: 127.0.0.1
     childs:
-    -   type: modbus.registers
-        mode: registers
-        devs: [ REx6, DI1, DI2, DI3, DI4, DI5, DI6 ]
-    -   type: modbus.registers
-        mode: coils
-        devs: [ REx6, DI1, DI2, DI3, DI4, DI5, DI6 ]
+        - type: modbus.slavemap
+          channel: MODBUS_SERVER_503
+          slaveid: 0
+          childs:
+            -   type: modbus.registers
+                mode: registers
+                devs: [ REx6, DI1, DI2, DI3, DI4, DI5, DI6 ]
+            -   type: modbus.registers
+                mode: coils
+                devs: [ REx6, DI1, DI2, DI3, DI4, DI5, DI6 ]
 
 
+## section defines hardware device - DI1..DI6
 -   name: GPIODI
     type: gpiod.gpionotify
     chip_path: /dev/gpiochip0
@@ -22,6 +29,7 @@
         - { name: DI5,  type: gpiod.input, pin: 22, input: 12, register: 0, reg_bit: 4,  debounce_reg: 1014, counter_reg: 10, debounce: 0 }
         - { name: DI6,  type: gpiod.input, pin: 24, input: 13, register: 0, reg_bit: 5,  debounce_reg: 1015, counter_reg: 12, debounce: 0 }
 
+## section defines hardware device - RO1..RO6
 -   name: GPIORO
     type: gpiod.gpiochip
     chip_path: /run/unipi-plc/by-sys/RO/gpiochip

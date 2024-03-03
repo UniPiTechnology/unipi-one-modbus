@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "unipi-one-modbus"
-version = "0.3"
+version = "0.22"
 authors = [
   { name="Miroslav Ondra", email="ondra@unipi.technology" },
 ]

@@ -1,4 +1,0 @@
--   name: &main_server MODBUS_SERVER_503 
-    type: modbus.server
-    port: 503
-    host: 127.0.0.1

@@ -1,8 +1,0 @@
-
-#######  Don't modify this file #####################
-# This is created by unipi-os-configurator by reading 
-# device eeprom
-
--   name: _constants
-    value1: &calibration1  5.561
-    value2: &calibration2  5.561

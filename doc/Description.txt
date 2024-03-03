@@ -1,0 +1,94 @@
+Configuration description
+
+- yaml format
+- can be divided into more files, files are joined before processing in alfabetical order
+
+Configuration defines list of nodes. Each node contains this properties:
+
+  type: required property. Specifies python module from source directory
+  name: name can start with sign _. In that case is section ignored
+  childs: list of subnodes (relation channel -> childs)
+  channel: name of upper node (inverse relation to childs)
+
+
+Other properties depends on type (python module)
+
+- type: modbus.server
+    This module starts Modbus TCP server on defined port
+
+    'host': {'type': str, 'help': 'Listening host/address. Default localhost', 'default':'localhost' },
+    'port': {'type': int, 'help': 'Listening tcp port. Default 503',  'default':503 },
+
+- type: modbus.slavemap
+    Defines register maps for Modbus server with slaveid
+
+    'channel': {'type': 'node', 'help': 'Link to Modbus server' },
+    'slaveid':  {'type': int, 'help': 'Modbus slave address for map. Default 1', 'default': 1 },
+
+- type: modbus.register
+    Defines relation between slavemap and hw devices
+
+    'channel': {'type': 'node', 'help': 'Link to Modbus slave map' },
+    'mode': {'type': str, 'help': 'Kind of map. Can be coils or registers' },
+    'devs':  {'types': 'node', 'help': 'List of devices providing some registers. Default empty', 'default': [] },
+
+- type: gpiod.gpiochip
+    Represents GPIO chip from Linux gpio subsystem, use for output
+
+    'chip_path': {'type': str, 'help': 'Gpiochip device. Default /dev/gpiochip0', 'default':'/dev/gpiochip0' },
+
+- type: gpiod.gpionotify
+    Represents GPIO chip from Linux gpio subsystem, use for input
+
+    'chip_path': {'type': str, 'help': 'Gpiochip device. Default /dev/gpiochip0', 'default':'/dev/gpiochip0' },
+
+- type: gpiod.input
+    Represents Digital Input connected to gpionotify chip.
+
+    'channel':  {'type': 'node', 'help': 'Link to gpionotify chip' },
+    'pin':      {'type': int, 'help': 'HW pin number of input' },
+    'debounce': {'type': int, 'help': 'Debouncing time in ms. default not set', 'default': 0},
+    'countermode': {'type': str, 'help': 'How to count pulses. Allowed rising, falling. Default rising' ,'default': 'rising'},
+    'input':    {'type': int, 'help': 'Input in modbus map containing input', 'default': 0 },
+    'register': {'type': int, 'help': 'Register in modbus map containing combined inputs value', 'default': 0 },
+    'reg_bit':  {'type': int, 'help': 'Bit number in combined inputs value', 'default': 0 },
+    'debounce_reg': {'type': int, 'help': 'Register in modbus map containing debounce value', 'default': 1010 },
+    'counter_reg': {'type': int, 'help': 'Register in modbus map containing counter value', 'default': 0 },
+
+- type: gpiod.regcoil
+    Represents Relay Output connected to gpiochip.
+
+    'channel': {'type': 'node', 'help': 'Link to gpiochip' },
+    'pins':     {'types': int, 'help': 'Array of bit number in chip register' },
+    'register': {'type': int, 'help': 'Register in modbus map containing relays', 'default': 0 },
+    'start_coil': {'type': int, 'help': 'First coil in modbus map containing relays', 'default': 0 },
+
+- type: iio.mcp342x
+    Represents ADC chip from Linux iio subsystem
+
+    'iioname': {'type': str, 'help': 'IIO name of chip', 'default' : '1-0068' },
+
+- type: iio.aireg
+    Represents Analog Input connected to mcp342x
+
+    'channel':    {'type': 'node', 'help': 'Link to mcp342x chip' },
+    'port':       {'type': int, 'help': 'Port number of input channel. 0-1', 'default':0 },
+    'resolution': {'type': int, 'help': 'ADC resolution in bits. 12,14,16 or 18', 'default':18 },
+    'calibration':{'type': float, 'help': 'Calibration konstant to convert ADC result to Voltage, default 11.419', 'default':11.419 },
+    'register':       {'type': int, 'help': 'Register in modbus map containing Ai value in [V]', 'default': 0 },
+    'resolution_reg': {'type': int, 'help': 'Register in modbus map containing resolution in bits', 'default': 1010 },
+
+- type: iio.pwmout
+    Represents Analog Output based on pwm
+
+    'path':      {'type': str, 'help': 'Sysfs path to pwm channel', 'default':'/sys/class/pwm/pwmchip0/pwm0/' },
+    'frequency': {'type': int, 'help': 'Frequency of PWM in Hz. Default 1000Hz', 'default': 1000 },
+    'register':  {'type': int, 'help': 'Register in modbus map containing output value', 'default': 0 },
+    'frequency_reg': {'type': int, 'help': 'Register in modbus map containing frequency in Hz', 'default': 1010 },
+    'falling': {'type': int, 'help': 'Set it to 1 for Unipi 1.0 board', 'default': 0 },
+
+
+- type: pigpioc.bus , pigpioc.*
+    Deprecated version of gpiod/iio nodes. Uses pigpio library for RaspberryPi.
+    Use source code in pigpioc.* to view available properties
+

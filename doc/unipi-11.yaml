@@ -1,5 +1,18 @@
+## section with name starting with _ is ignored
+##    here serves only to define some calibration constants used later
+
+-   name: _constants
+    value1: &calibration1  5.561
+    value2: &calibration2  5.561
+
+## section defines Modbus server
+-   name: MODBUS_SERVER_503
+    type: modbus.server
+    port: 503
+    host: 127.0.0.1
+
 -   type: modbus.slavemap
-    channel: *main_server
+    channel: MODBUS_SERVER_503
     slaveid: 0
     childs:
     -   type: modbus.registers
@@ -9,7 +22,10 @@
         mode: coils
         devs: [ REx8, DI1, DI2, DI3, DI4, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI12 ]
 
-
+## section defines hardware devices - DI1..DI12 
+##   on modbus inputs(coils) 8..19 and register 0
+##   counters on modbus registers 7..30. Each counter use 2 register with value int32
+##   debounce setting on modbus register 1010..1021
 -   name: GPIODI
     type: gpiod.gpionotify
     chip_path: /dev/gpiochip0
@@ -28,6 +44,8 @@
         - { name: DI11, type: gpiod.input, pin: 25, input: 18, register: 0, reg_bit: 10, debounce_reg: 1020, counter_reg: 27, debounce: 0 }
         - { name: DI12, type: gpiod.input, pin: 10, input: 19, register: 0, reg_bit: 11, debounce_reg: 1021, counter_reg: 29, debounce: 0 }
 
+## section defines hardware devices - RO1..RO8
+##   on modbus coils 0..8 and register 1
 -   name: GPIORO
     type: gpiod.gpiochip
     chip_path: /run/unipi-plc/by-sys/RO/gpiochip
@@ -38,7 +56,9 @@
             register: 1
             pins: [ 7, 6, 5, 4, 3, 2, 1, 0 ]
 
-
+## section defines hardware devices - AI1 AI2
+##   on modbus registers 3..6, Each value use 2 registers as float
+##   resolution on register 1023 and 1024
 -   name: ADC1
     type: iio.mcp342x
     iioname: 1-0068
@@ -56,8 +76,10 @@
             register: 5
             resolution_reg: 1024
 
+## section defines hardware devices - AO1
+##   on modbus register 2
+##   frequency in register 1022
 -   name: AO1
     type: iio.pwmout
     register: 2
     frequency_reg: 1022
-    falling: 1
