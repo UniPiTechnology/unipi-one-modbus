@@ -7,5 +7,5 @@ __all__ = [
     "__version_full__",
 ]
 
-__version__ = "0.22"
+__version__ = "0.24"
 __version_full__ = f"[unipi-one-modbus, version {__version__}]"
