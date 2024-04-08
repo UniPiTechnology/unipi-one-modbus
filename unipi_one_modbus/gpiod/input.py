@@ -76,7 +76,7 @@ class GpiodInput(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMe
         try:
             if (register != self.counter_reg) or (len(values) < 2):
                 raise ValueError('Required 2 register values')
-            self.counter = values[0] + values[1] << 16
+            self.counter = values[0] + (values[1] << 16)
             if hasattr(self,'rdatastore'):
                 self.rdatastore[register] = values[0]
                 self.rdatastore[register+1] = values[1]
@@ -108,7 +108,8 @@ class GpiodInput(virtual.CoilProvider, virtual.RegisterProvider, metaclass=DevMe
                 self.rdatastore[self.register] |= (1<<self.reg_bit)
             else:
                 self.rdatastore[self.register] &= ~(1<<self.reg_bit)
-            self.rdatastore[self.counter_reg] = self.counter
+            self.rdatastore[self.counter_reg] = self.counter & 0xffff
+            self.rdatastore[self.counter_reg+1] = self.counter >> 16
             self.cdatastore[self.input] = self.value
 
 
