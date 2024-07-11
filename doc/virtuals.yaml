@@ -1,0 +1,22 @@
+## section with name starting with _ is ignored
+
+## section defines Modbus server
+-   name: MODBUS_SERVER_503
+    type: modbus.server
+    port: 50200
+    host: 127.0.0.1
+
+## section defines register map with slaveid=0 on Modbus server
+-   type: modbus.slavemap
+    channel: MODBUS_SERVER_503
+    slaveid: 0
+    childs:
+    -   type: modbus.registers
+        mode: registers
+        devs: [ VIRTUAL_REGS ]
+
+- name: VIRTUAL_REGS
+    type: virtuals.directory
+    path: /home/bokula/Devel/unipi-one-modbus/tmp
+    min_reg: 4000
+
