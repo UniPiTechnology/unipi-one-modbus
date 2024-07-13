@@ -15,7 +15,7 @@
         mode: registers
         devs: [ VIRTUAL_REGS ]
 
-- name: VIRTUAL_REGS
+-   name: VIRTUAL_REGS
     type: virtuals.directory
     path: /home/bokula/Devel/unipi-one-modbus/tmp
     min_reg: 4000
