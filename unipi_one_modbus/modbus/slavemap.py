@@ -4,26 +4,27 @@ import logging
 
 from pymodbus.datastore import (
     ModbusSequentialDataBlock,
-    ModbusSlaveContext,
+    ModbusDeviceContext,
 )
+from pymodbus.constants import ExcCodes
 from pymodbus.exceptions import ParameterException
 
 from pymodbus.pdu import (
     ExceptionResponse, 
-    ModbusExceptions
 )
 
 from ..rpcmethods import DevMeta, get_kwargs, check_dev_type
 from .server import ModbusServer
 
 
-class ModbusSlaveMap(ModbusSlaveContext,metaclass=DevMeta):
+class ModbusSlaveMap(ModbusDeviceContext,metaclass=DevMeta):
 
     def __init__(self,  name, channel, slaveid=1):
-        ModbusSlaveContext.__init__(self, zero_mode=True)
+        ModbusDeviceContext.__init__(self)
         self.name = name
         self.slaveid = slaveid
         self.channel = channel
+        self.zero_mode = True
 
 
     def check(self):
@@ -43,7 +44,7 @@ class ModbusSlaveMap(ModbusSlaveContext,metaclass=DevMeta):
         for block in blocks: 
             self.store[block] = datablock
 
-    def setValues(self, fc_as_hex, address, values):
+    async def async_setValues(self, fc_as_hex, address, values):
         """Set the datastore with the supplied values.
 
         :param fc_as_hex: The function we are working with
@@ -52,13 +53,26 @@ class ModbusSlaveMap(ModbusSlaveContext,metaclass=DevMeta):
         """
         if not self.zero_mode:
             address += 1
-        logging.debug("setValues[{}] address-{}: count-{}", fc_as_hex, address, len(values))
+        logging.debug(f"setValues[{fc_as_hex}] address={address}: count={len(values)}")
         try:
-            self.store[self.decode(fc_as_hex)].setValues(address, values)
+            await self.store[self.decode(fc_as_hex)].async_setValues(address, values)
         except ParameterException:
-            return ExceptionResponse(fc_as_hex, exception_code=ModbusExceptions.IllegalAddress)
+            return ExceptionResponse(fc_as_hex, exception_code=ExcCodes.ILLEGAL_ADDRESS)
         except Exception:
-            return ExceptionResponse(fc_as_hex, exception_code=ModbusExceptions.IllegalValue)
+            return ExceptionResponse(fc_as_hex, exception_code=ExcCodes.ILLEGAL_VALUE)
+
+    def getValues(self, func_code, address, count=1):
+        """Get `count` values from datastore.
+
+        :param func_code: The function we are working with
+        :param address: The starting address
+        :param count: The number of values to retrieve
+        :returns: The requested values from a:a+c
+        """
+        if not self.zero_mode:
+            address += 1
+        logging.debug("getValues: fc-[{func_code}] address={address}: count={count}")
+        return self.store[self.decode(func_code)].getValues(address, count)
 
 
 Foptions = {

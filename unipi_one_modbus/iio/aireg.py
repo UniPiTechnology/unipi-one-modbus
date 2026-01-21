@@ -1,8 +1,7 @@
 import asyncio
 import logging
 
-from pymodbus.payload import BinaryPayloadBuilder
-from pymodbus.constants import Endian
+from pymodbus.client import ModbusTcpClient
 
 from .mcp342x import Mcp342x
 from ..rpcmethods import DevMeta, get_kwargs, parse_name, check_dev_type
@@ -53,9 +52,10 @@ class AiReg(virtual.RegisterProvider, metaclass=DevMeta):
         try:
             result = await self.channel.measure_port(self.port, self.resolution, 1)
             if (result is not None) and hasattr(self,'rdatastore'):
-                builder = BinaryPayloadBuilder(byteorder=Endian.BIG, wordorder=Endian.LITTLE)
-                builder.add_32bit_float(result * self.calibration)
-                regs = builder.to_registers()
+                regs = ModbusTcpClient.convert_to_registers(
+                           value=int(round(result * self.calibration, 0)),
+                           data_type=ModbusTcpClient.DATATYPE.UINT32,
+                           word_order="little")
                 self.rdatastore[self.register] = regs[0]
                 self.rdatastore[self.register+1] = regs[1]
 

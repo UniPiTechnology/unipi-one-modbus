@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "unipi-one-modbus"
-version = "0.24"
+version = "0.25"
 authors = [
   { name="Miroslav Ondra", email="ondra@unipi.technology" },
 ]
@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 dependencies = [
-    'pymodbus == 3.5.4',
+    'pymodbus == 3.11.4',
     'PyYAML == 6.0.1',
     'pylibiio == 0.25',
     'gpiod == 2.1.1'
