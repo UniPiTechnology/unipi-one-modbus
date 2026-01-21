@@ -48,6 +48,15 @@ class ModbusRegisters(metaclass=DevMeta):
         handle = set(range(address, address + count))
         return handle.issubset(set(iter(self.values.keys())))
 
+    async def async_getValues(self, address: int, count=1):
+        """Return the requested values from the datastore.
+
+        :param address: The starting address
+        :param count: The number of values to retrieve
+        :raises TypeError:
+        """
+        return self.getValues(address, count)
+
     def getValues(self, address, count=1):
         """Return the requested values of the datastore.
 
@@ -57,7 +66,7 @@ class ModbusRegisters(metaclass=DevMeta):
         """
         return [self.values[i] for i in range(address, address + count)]
 
-    def setValues(self, address, values, use_as_default=False):
+    async def async_setValues(self, address, values, use_as_default=False):
         """Set the requested values of the datastore.
 
         :param address: The starting address
@@ -82,10 +91,20 @@ class ModbusRegisters(metaclass=DevMeta):
                         if asyncio.iscoroutine(coro): coros.append(coro)
         except Exception as E:
             exc = E
-        if coros:
-            [ asyncio.create_task(coro) for coro in coros ]
+        async with asyncio.TaskGroup() as tg:
+            for coro in coros:
+                tg.create_task(coro)
         if exc:
             raise exc
+
+    def __iter__(self):
+        """Iterate over the data block data.
+
+        :returns: An iterator of the data block data
+        """
+        if isinstance(self.values, dict):
+            return iter(self.values.items())
+        return iter({})
 
 Foptions = {
     'channel': {'type': 'node', 'help': 'Link to Modbus slave map' },

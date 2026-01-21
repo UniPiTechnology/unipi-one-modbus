@@ -6,13 +6,11 @@ from .. import __version__ as unipi_one_version
 from pymodbus.datastore import (
     ModbusSequentialDataBlock,
     ModbusServerContext,
-    ModbusSlaveContext,
+    ModbusDeviceContext,
     ModbusSparseDataBlock,
 )
-from pymodbus.transaction import ModbusSocketFramer
-from pymodbus.device import ModbusDeviceIdentification
+from pymodbus.pdu.device import ModbusDeviceIdentification
 from pymodbus.server import ModbusTcpServer
-#from pymodbus.server import StartAsyncTcpServer
 
 from ..rpcmethods import DevMeta, get_kwargs
 
@@ -56,9 +54,9 @@ class ModbusServer(metaclass=DevMeta):
         logging.info(txt)
 
         identity = ModbusDeviceIdentification(info_name=self.info_name)
-        context  = ModbusServerContext(slaves=self.slaves, single=False)
+        context  = ModbusServerContext(devices=self.slaves, single=False)
 
-        self.server = ModbusTcpServer(context, ModbusSocketFramer, identity, address)
+        self.server = ModbusTcpServer(context, identity=identity, address=address)
         with suppress(asyncio.exceptions.CancelledError):
             try:
                 await self.server.serve_forever()

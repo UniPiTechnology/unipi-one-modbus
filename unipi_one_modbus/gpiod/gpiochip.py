@@ -67,9 +67,10 @@ class GpioChip(metaclass=DevMeta):
             logging.error(f"Gpiochip {self.chip_path} set data error: {E}")
         else:
             try:
-                coros = filter(lambda cor: asyncio.iscoroutine(cor),
-                               (cb(self.values) for cb in self.notify_callbacks))
-                [ asyncio.create_task(coro) for coro in coros ]
+                async with asyncio.TaskGroup() as tg:
+                    for coro in filter(lambda cor: asyncio.iscoroutine(cor),
+                               (cb(self.values) for cb in self.notify_callbacks)):
+                        tg.create_task(coro)
             except Exception as E:
                 logging.error(f"Gpiochip connect callback error: {str(E)}")
 
@@ -85,9 +86,10 @@ class GpioChip(metaclass=DevMeta):
             values = await asyncio.to_thread(self.request.get_values, lines)
             self.values = dict(zip(lines, ((1 if value == Value.ACTIVE else 0) for value in values)))
             try:
-                coros = filter(lambda cor: asyncio.iscoroutine(cor),
-                               (cb(self.values) for cb in self.notify_callbacks))
-                [ asyncio.create_task(coro) for coro in coros ]
+                async with asyncio.TaskGroup() as tg:
+                    for coro in filter(lambda cor: asyncio.iscoroutine(cor),
+                               (cb(self.values) for cb in self.notify_callbacks)):
+                        tg.create_task(coro)
             except Exception as E:
                 logging.error(f"Gpiochip {self.chip_path} connect callback error: {str(E)}")
                 #import traceback
