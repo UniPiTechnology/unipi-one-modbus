@@ -53,8 +53,8 @@ class AiReg(virtual.RegisterProvider, metaclass=DevMeta):
             result = await self.channel.measure_port(self.port, self.resolution, 1)
             if (result is not None) and hasattr(self,'rdatastore'):
                 regs = ModbusTcpClient.convert_to_registers(
-                           value=int(round(result * self.calibration, 0)),
-                           data_type=ModbusTcpClient.DATATYPE.UINT32,
+                           value=result * self.calibration,
+                           data_type=ModbusTcpClient.DATATYPE.FLOAT32,
                            word_order="little")
                 self.rdatastore[self.register] = regs[0]
                 self.rdatastore[self.register+1] = regs[1]
